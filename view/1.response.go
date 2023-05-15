@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -10,6 +11,10 @@ func main() {
 
 	//加载html模板
 	// router.LoadHTMLGlob("templates/*")
+
+	//静态资源
+	router.StaticFile("golang.png", "static/images/golang.png")
+
 	//响应字符串
 	router.GET("/", func(context *gin.Context) {
 		//状态码 HTTP status
@@ -38,6 +43,7 @@ func main() {
 	router.GET("/yaml", _yaml)
 	//返回html
 	// router.GET("/html", _html)
+	//响应文件，下载目录下文件
 
 	router.Run(":8081")
 }
@@ -78,8 +84,8 @@ func _yaml(context *gin.Context) {
 	context.YAML(http.StatusOK, gin.H{"message": "this is a yaml", "status": http.StatusOK})
 }
 
-//gin.H{} 可以传参进模板 {"username":"yint"}
-//也可以传递结构体
+// gin.H{} 可以传参进模板 {"username":"yint"}
+// 也可以传递结构体
 // func _html(context *gin.Context) {
 // 	context.HTML(http.StatusOK, "index.html", gin.H{})
 // }
