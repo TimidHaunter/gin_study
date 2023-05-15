@@ -43,7 +43,8 @@ func main() {
 	router.GET("/yaml", _yaml)
 	//返回html
 	// router.GET("/html", _html)
-	//响应文件，下载目录下文件
+	//重定向
+	router.GET("/baidu", _redirect)
 
 	router.Run(":8081")
 }
@@ -89,3 +90,13 @@ func _yaml(context *gin.Context) {
 // func _html(context *gin.Context) {
 // 	context.HTML(http.StatusOK, "index.html", gin.H{})
 // }
+
+// 301 302区别
+// func _redirect(context *gin.Context) {
+// 	context.Redirect(301, "http://www.baidu.com")
+// }
+
+func _redirect(context *gin.Context) {
+	//重定向自己的路由
+	context.Redirect(http.StatusMovedPermanently, "/string")
+}
