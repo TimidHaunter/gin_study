@@ -42,35 +42,70 @@ func _postform(content *gin.Context) {
 }
 
 /**
+ * 原始参数
  * 可以接收 post form-data x-www-form-unlencoded json
  */
-func _raw(content *gin.Context) {
-	// fmt.Println(content.GetRawData())
+// func _raw(content *gin.Context) {
+// 	// fmt.Println(content.GetRawData())
 
+// 	body, _ := content.GetRawData()
+// 	contentType := content.GetHeader("Content-Type")
+
+// 	switch contentType {
+// 	case "application/json":
+// 		//解析到结构体
+// 		type User struct {
+// 			Name string `json:"name"`
+// 			Age  int    `json:"age"`
+// 		}
+// 		var user User
+// 		//解析JSON
+// 		err := json.Unmarshal(body, &user)
+// 		if err != nil {
+// 			fmt.Println(err.Error())
+// 		}
+
+// 		fmt.Println(user)
+// 	}
+
+// 	// fmt.Println(string(body))
+
+// 	//header zzz
+// 	// header := content.GetHeader("YYY")
+// 	// fmt.Println(header)
+// }
+
+func _raw(content *gin.Context) {
+	type User struct {
+		Name string `json:"name"`
+		Age  int    `json:"age"`
+	}
+	var user User
+	//指针
+	err := bindJson(content, &user)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(user)
+}
+
+/*
+ * obj any 泛型
+ */
+func bindJson(content *gin.Context, obj any) (err error) {
 	body, _ := content.GetRawData()
 	contentType := content.GetHeader("Content-Type")
 
 	switch contentType {
 	case "application/json":
-		type User struct {
-			Name string `json:"name"`
-			Age  int    `json:"age"`
-		}
-		var user User
 		//解析JSON
-		err := json.Unmarshal(body, &user)
+		err = json.Unmarshal(body, &obj)
 		if err != nil {
 			fmt.Println(err.Error())
+			return err
 		}
-
-		fmt.Println(user)
 	}
-
-	// fmt.Println(string(body))
-
-	//header zzz
-	// header := content.GetHeader("YYY")
-	// fmt.Println(header)
+	return nil
 }
 
 func main() {
